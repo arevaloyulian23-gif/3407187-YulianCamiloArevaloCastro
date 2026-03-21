@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🚗 Sistema de Gestión de Flotas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <div class="app-container">
+      
+      <!-- HEADER -->
+      <header class="header">
+        <h1>🚗 Sistema de Gestión de Flotas</h1>
+        <p class="subtitle">Control y administración de vehículos</p>
+      </header>
+
+      <!-- NAV -->
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="catalog">🚗 Vehículos</button>
+        <button class="tab-btn" data-tab="users">👥 Personal</button>
+        <button class="tab-btn" data-tab="transactions">🔄 Movimientos</button>
+        <button class="tab-btn" data-tab="stats">📊 Estadísticas</button>
+      </nav>
+
+      <!-- CONTENIDO -->
+      <main class="tab-content">
+
+        <!-- VEHÍCULOS -->
+        <section id="catalog" class="tab-panel active">
+          <div class="panel-header">
+            <h2>🚗 Flota de Vehículos</h2>
+
+            <div class="actions">
+              <input type="text" id="search-input" placeholder="Buscar vehículo..." />
+
+              <select id="filter-type">
+                <option value="all">Todos los tipos</option>
+                <option value="Bus">Buses</option>
+                <option value="Truck">Camiones</option>
+                <option value="TravelCar">Carros</option>
+              </select>
+
+              <select id="filter-status">
+                <option value="all">Todos</option>
+                <option value="active">Activos</option>
+                <option value="inactive">Inactivos</option>
+              </select>
+
+              <button id="add-item-btn" class="btn btn-primary">
+                + Agregar Vehículo
+              </button>
+            </div>
+          </div>
+
+          <div id="item-list" class="items-grid"></div>
+
+          <div id="empty-state" class="empty-state" style="display: none;">
+            <p>🚫 No hay vehículos registrados</p>
+            <p class="hint">Agrega tu primer vehículo</p>
+          </div>
+        </section>
+
+        <!-- USUARIOS -->
+        <section id="users" class="tab-panel">
+          <div class="panel-header">
+            <h2>👥 Personal de la Flota</h2>
+
+            <div class="actions">
+              <input type="text" id="search-users" placeholder="Buscar usuario..." />
+
+              <select id="filter-role">
+                <option value="all">Todos los roles</option>
+                <option value="Driver">Conductores</option>
+                <option value="FleetManager">Administradores</option>
+              </select>
+
+              <button id="add-user-btn" class="btn btn-primary">
+                + Agregar Usuario
+              </button>
+            </div>
+          </div>
+
+          <div id="user-list" class="users-grid"></div>
+        </section>
+
+        <!-- MOVIMIENTOS -->
+        <section id="transactions" class="tab-panel">
+          <div class="panel-header">
+            <h2>🔄 Movimientos de la Flota</h2>
+          </div>
+
+          <div id="transaction-list" class="transactions-list"></div>
+        </section>
+
+        <!-- ESTADÍSTICAS -->
+        <section id="stats" class="tab-panel">
+          <div class="panel-header">
+            <h2>📊 Estadísticas del Sistema</h2>
+          </div>
+
+          <div id="stats-container" class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-value" id="stat-total">0</span>
+              <span class="stat-label">Total Vehículos</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="stat-active">0</span>
+              <span class="stat-label">Activos</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="stat-inactive">0</span>
+              <span class="stat-label">Inactivos</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="stat-users">0</span>
+              <span class="stat-label">Usuarios</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- MODAL VEHÍCULOS -->
+      <div id="item-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Agregar Vehículo</h3>
+            <button class="close-btn" id="close-modal">&times;</button>
+          </div>
+
+          <form id="item-form" class="modal-form">
+
+            <div class="form-group">
+              <label>Tipo de Vehículo</label>
+              <select id="item-type" required>
+                <option value="">Selecciona</option>
+                <option value="Bus">Bus</option>
+                <option value="Truck">Camión</option>
+                <option value="TravelCar">Carro</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" id="item-name" required />
+            </div>
+
+            <div class="form-group">
+              <label>Ubicación</label>
+              <input type="text" id="item-location" required />
+            </div>
+
+            <div id="dynamic-fields"></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-secondary" id="cancel-btn">
+                Cancelar
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAL USUARIOS -->
+      <div id="user-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Agregar Usuario</h3>
+            <button class="close-btn" id="close-user-modal">&times;</button>
+          </div>
+
+          <form id="user-form" class="modal-form">
+
+            <div class="form-group">
+              <label>Rol</label>
+              <select id="user-role" required>
+                <option value="">Selecciona</option>
+                <option value="Driver">Conductor</option>
+                <option value="FleetManager">Administrador</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" id="user-name" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="user-email" required />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-secondary" id="cancel-user-btn">
+                Cancelar
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="starter/script.js"></script>
+  </body>
+</html>
